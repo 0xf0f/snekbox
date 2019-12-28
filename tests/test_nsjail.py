@@ -152,3 +152,16 @@ class NsJailTests(unittest.TestCase):
         result = self.nsjail.python3(code)
         self.assertEqual(result.returncode, 1)
         self.assertEqual(result.stderr, None)
+
+    def test_multiprocessing_shm(self):
+        code = dedent("""
+        from multiprocessing.shared_memory import SharedMemory
+        try:
+            SharedMemory('test', create=True, size=16)
+        except FileExistsError:
+            pass
+        """).strip()
+
+        result = self.nsjail.python3(code)
+        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.stderr, None)
