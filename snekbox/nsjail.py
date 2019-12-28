@@ -127,6 +127,8 @@ class NsJail:
                 "-E", "VECLIB_MAXIMUM_THREADS=1",
                 "-E", "NUMEXPR_NUM_THREADS=1",
                 "-R/usr", "-R/lib", "-R/lib64",
+                "-m", "none:/dev:tmpfs:size=0",
+                "-m", "none:/run:tmpfs:size=0",
                 "--user", "65534",  # nobody
                 "--group", "65534",  # nobody/nogroup
                 "--time_limit", "2",
