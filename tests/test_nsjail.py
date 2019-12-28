@@ -122,3 +122,33 @@ class NsJailTests(unittest.TestCase):
             "INFO:snekbox.nsjail:pid=20 ([STANDALONE MODE]) exited with status: 2, (PIDs left: 0)",
             log.output
         )
+
+    def test_dev_shm(self):
+        code = dedent("""
+        with open('/dev/shm/test', 'wb') as file:
+            file.write(bytes([255]))
+        """).strip()
+
+        result = self.nsjail.python3(code)
+        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.stderr, None)
+
+    def test_run_shm(self):
+        code = dedent("""
+        with open('/run/shm/test', 'wb') as file:
+            file.write(bytes([255]))
+        """).strip()
+
+        result = self.nsjail.python3(code)
+        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.stderr, None)
+
+    def test_tmp(self):
+        code = dedent("""
+        with open('/tmp/test', 'wb') as file:
+            file.write(bytes([255]))
+        """).strip()
+
+        result = self.nsjail.python3(code)
+        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.stderr, None)
